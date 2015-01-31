@@ -1,13 +1,0 @@
-x = 1:10
-x
-boxplot(x)
-ls()
-m = lm( sal$salary ~ sal$field );
-m = lm( case$salary ~ case$field );
-load(".RData")
-m = lm( sal$salary ~ sal$field );
-getwd()
-m = lm( sal$salary ~ sal$field );
-exp_growth(1,0.1,1)exp_growth = function (x),r,t) {xt = (x0) ((1+r)^t)xt;}
-ls()
-load(".RData")
