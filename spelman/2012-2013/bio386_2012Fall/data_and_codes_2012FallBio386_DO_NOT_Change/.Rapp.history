@@ -1,0 +1,142 @@
+x = 1:10
+x
+boxplot(x)
+ls()
+m = lm( sal$salary ~ sal$field );
+m = lm( case$salary ~ case$field );
+load(".RData")
+m = lm( sal$salary ~ sal$field );
+getwd()
+m = lm( sal$salary ~ sal$field );
+exp_growth(1,0.1,1)exp_growth = function (x),r,t) {xt = (x0) ((1+r)^t)xt;}
+getwd()
+ls()
+getwd()
+ls()
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")#
+diff.CV.obs = diff.Value ( PIN.pairs.tb, inData );
+rm(list=ls())#
+> list.files()
+rm(list=ls())
+list.files()
+list.files(, pattern="GSE")
+CV.tb = read.csv("GSE33276_log2CV.csv")
+CV.tb$ORF = as.character( CV.tb$ORF )
+PIN.pairs.tb = read.csv("pairs.csv", colClass=c("character","character"))
+GIN.pairs.tb = read.csv("sgadata_costanzo2009_stringentCutoff_101120.csv", header=F, 		colClass=c("character","character","character","character",NA,NA,NA))#
+names(GIN.pairs.tb) = c("ORF1", "name1", "ORF2", "name2", "epsilon", "stddev", "p")
+PositiveGIN.pairs.tb = GIN.pairs.tb[GIN.pairs.tb$epsilon>0, ]#
+NegativeGIN.pairs.tb = GIN.pairs.tb[GIN.pairs.tb$epsilon<0, ]
+diff.Value = function( inpairs, inData ) { #inData must be in "ORF", "Value" format#
+ 	inpairs$Value1= inData$Value[match(inpairs$ORF1, inData$ORF)];#
+ 	inpairs$Value2= inData$Value[match(inpairs$ORF2, inData$ORF)];#
+ 	ret = mean( abs( inpairs$Value1 - inpairs$Value2 ), na.rm=T );#
+ 	}
+call.diff.Value.in.permuted.pairs = function( orig.pairs, inData, inNsims) {#
+ 	Nsims = inNsims; #number of permutations#
+ 	permutated.diff.values = numeric( Nsims );
+ids.orig = c( orig.pairs$ORF1, orig.pairs$ORF2 );#
+ 	len = length( ids.orig );#
+ 	#N simulations#
+ 	for( i in 1:Nsims ) {#
+ 		newids = sample( ids.orig ); #permutation is done here.#
+ 		# newids is a single column vector#
+ 		# newids reformatted to two columns (random pairs)#
+ 		ORF1 = newids[1: (len/2)]; # split the lone to two columns, 1st half#
+ 		ORF2 = newids[ (len/2+1) : len]; # the second hand#
+ 		#converted back spreadsheet, (the random network in pairs)#
+ 		new.pairs = data.frame( cbind(ORF1, ORF2) );#
+ 		#calculate delta.K for one random network#
+ 		permutated.diff.values[i] = diff.Value( new.pairs, inData );#
+ 	}#
+ 	return( permutated.diff.values )#
+ } #end of permutation function
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")
+diff.CV.obs = diff.Value ( PIN.pairs.tb, inData );
+ls()
+hist(permutated.diff.CV)
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")#
+diff.CV.obs = diff.Value ( PIN.pairs.tb, inData );
+permutated.diff.CV = call.diff.Value.in.permuted.pairs( PIN.pairs.tb, inData, 1000)#
+hist(permutated.diff.CV)
+sub = permutated.diff.CV[ permutated.diff.CV < diff.CV.obs ]#
+p.Value = length(sub) / length(permutated.diff.CV);#
+if(p.Value == 0) { p.Value = 1 / length(permutated.diff.CV)}
+mylim = c(min(c(permutated.diff.CV, diff.CV.obs))*0.95, max(c(permutated.diff.CV, diff.CV.obs))*1.05 )#
+hist( permutated.diff.CV, xlim=c(mylim ), br=20, main="PIN" );#
+arrows( diff.CV.obs, 50, diff.CV.obs, 2, col="red" );#
+text( diff.CV.obs, 50.5, "obs");
+PositiveGIN.pairs.tb = GIN.pairs.tb[GIN.pairs.tb$epsilon>0, c("ORF1", "ORF2") ]
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")
+diff.CV.obs = diff.Value ( PositiveGIN.pairs.tb, inData );
+permutated.diff.CV = call.diff.Value.in.permuted.pairs( PositiveGIN.pairs.tb, inData, 1000)#
+hist(permutated.diff.CV)
+sub = permutated.diff.CV[ permutated.diff.CV < diff.CV.obs ]#
+p.Value = length(sub) / length(permutated.diff.CV);
+ls()
+load(".RData")
+sub = permutated.diff.CV[ permutated.diff.CV < diff.CV.obs ]#
+p.Value = length(sub) / length(permutated.diff.CV);
+permutated.diff.CV = call.diff.Value.in.permuted.pairs( PositiveGIN.pairs.tb, inData, 1000)#
+hist(permutated.diff.CV)
+rm(list=ls())
+list.files()
+list.files(, pattern="GSE")
+CV.tb = read.csv("GSE33276_log2CV.csv")
+>
+str(CV.tb)
+PIN.pairs.tb = read.csv("pairs.csv", colClass=c("character","character"))
+str(PIN.pairs.tb)
+GIN.pairs.tb = read.csv("sgadata_costanzo2009_stringentCutoff_101120.csv", header=F, 		colClass=c("character","character","character","character",NA,NA,NA))#
+names(GIN.pairs.tb) = c("ORF1", "name1", "ORF2", "name2", "epsilon", "stddev", "p")#
+#epsilon = fij - fi * fj#
+PositiveGIN.pairs.tb = GIN.pairs.tb[GIN.pairs.tb$epsilon>0, ]#
+NegativeGIN.pairs.tb = GIN.pairs.tb[GIN.pairs.tb$epsilon<0, ]#
+str(PositiveGIN.pairs.tb)
+str(NegativeGIN.pairs.tb)
+diff.Value = function( inpairs, inData ) { #inData must be in "ORF", "Value" format#
+ 	inpairs$Value1= inData$Value[match(inpairs$ORF1, inData$ORF)];#
+ 	inpairs$Value2= inData$Value[match(inpairs$ORF2, inData$ORF)];#
+ 	ret = mean( abs( inpairs$Value1 - inpairs$Value2 ), na.rm=T );#
+ 	}#
+ # first attempt for a generic permuatation test function#
+ call.diff.Value.in.permuted.pairs = function( orig.pairs, inData, inNsims) {#
+ 	Nsims = inNsims; #number of permutations#
+ 	permutated.diff.values = numeric( Nsims ); #empty vector to store calculations#
+ 	#merge two columns to a single column for 'sample' function#
+ 	ids.orig = c( orig.pairs$ORF1, orig.pairs$ORF2 );#
+ 	len = length( ids.orig );#
+ 	#N simulations#
+ 	for( i in 1:Nsims ) {#
+ 		newids = sample( ids.orig ); #permutation is done here.#
+ 		# newids is a single column vector#
+ 		# newids reformatted to two columns (random pairs)#
+ 		ORF1 = newids[1: (len/2)]; # split the lone to two columns, 1st half#
+ 		ORF2 = newids[ (len/2+1) : len]; # the second hand#
+ 		#converted back spreadsheet, (the random network in pairs)#
+ 		new.pairs = data.frame( cbind(ORF1, ORF2) );#
+ 		#calculate delta.K for one random network#
+ 		permutated.diff.values[i] = diff.Value( new.pairs, inData );#
+ 	}#
+ 	return( permutated.diff.values )#
+ } #end of permutation function
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")
+head(CV.tb)
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")#
+diff.CV.obs = diff.Value ( PIN.pairs.tb, inData );
+permutated.diff.CV = call.diff.Value.in.permuted.pairs( PIN.pairs.tb, inData, 1000)#
+hist(permutated.diff.CV)
+sub = permutated.diff.CV[ permutated.diff.CV < diff.CV.obs ]#
+p.Value = length(sub) / length(permutated.diff.CV);#
+if(p.Value == 0) { p.Value = 1 / length(permutated.diff.CV)}
+mylim = c(min(c(permutated.diff.CV, diff.CV.obs))*0.95, max(c(permutated.diff.CV, diff.CV.obs))*1.05 )#
+hist( permutated.diff.CV, xlim=c(mylim ), br=20, main="PIN" );#
+arrows( diff.CV.obs, 50, diff.CV.obs, 2, col="red" );#
+text( diff.CV.obs, 50.5, "obs");
+PositiveGIN.pairs.tb = GIN.pairs.tb[GIN.pairs.tb$epsilon>0, c("ORF1", "ORF2") ]#
+str(PositiveGIN.pairs.tb)
+inData = CV.tb[, c(1,4)]; names(inData) = c("ORF", "Value")
+diff.CV.obs = diff.Value ( PositiveGIN.pairs.tb, inData );
+permutated.diff.CV = call.diff.Value.in.permuted.pairs( PositiveGIN.pairs.tb, inData, 1000)#
+hist(permutated.diff.CV)
