@@ -1,11 +1,12 @@
 # Version info: R 2.14.1, Biobase 2.15.3, GEOquery 2.23.2, limma 3.10.1
 # R scripts generated  Tue Sep 29 08:22:41 EDT 2015
+# source("http://bioconductor.org/biocLite.R")
+# biocLite()
+# biocLite("Biobase")
+# biocLite( "GEOquery")
+# biocLite("limma")
 
-source("http://bioconductor.org/biocLite.R")
-biocLite()
-biocLite("Biobase")
-biocLite( "GEOquery")
-biocLite("limma")
+rm(list=ls())
 
 ################################################################
 #   Differential expression analysis with limma
@@ -13,8 +14,16 @@ library(Biobase)
 library(GEOquery)
 library(limma)
 
-# load series and platform data from GEO
+setwd("~/github/student.project.archives/spelman/2015-2016/FL")
+
+# load series and platform data from GEO, 
+# This takes a few minutes
 gset <- getGEO("GSE32719", GSEMatrix =TRUE)[[1]]
+
+# load NCBI platform annotation
+gpl <- annotation(gset)
+platf <- getGEO(gpl, AnnotGPL=TRUE)
+ncbifd <- data.frame(attr(dataTable(platf), "table"))
 
 # make proper column names to match toptable 
 fvarLabels(gset) <- make.names(fvarLabels(gset))
@@ -27,9 +36,11 @@ ex <- exprs(gset)
 qx <- as.numeric(quantile(ex, c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm=T))
 LogC <- (qx[5] > 100) ||
   (qx[6]-qx[1] > 50 && qx[2] > 0) ||
-  (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2)
-if (LogC) { ex[which(ex <= 0)] <- NaN
-exprs(gset) <- log2(ex) }
+  (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2)  #some kind of error checks
+if (LogC) { 
+  ex[which(ex <= 0)] <- NaN
+  exprs(gset) <- log2(ex) 
+}
 
 # set up the data and proceed with analysis
 fl <- as.factor(sml)
@@ -42,10 +53,6 @@ fit2 <- contrasts.fit(fit, cont.matrix)
 fit2 <- eBayes(fit2, 0.01)
 tT <- topTable(fit2, adjust="fdr", sort.by="B", number=250)
 
-# load NCBI platform annotation
-gpl <- annotation(gset)
-platf <- getGEO(gpl, AnnotGPL=TRUE)
-ncbifd <- data.frame(attr(dataTable(platf), "table"))
 
 # replace original platform annotation
 tT <- tT[setdiff(colnames(tT), setdiff(fvarLabels(gset), "ID"))]
